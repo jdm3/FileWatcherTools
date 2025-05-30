@@ -1,0 +1,7 @@
+.vs/
+*.sdf
+*.v12.suo
+*.csproj.user
+/autobuild/build/
+/onchanged/build/
+launchSettings.json
