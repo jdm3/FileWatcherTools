@@ -275,10 +275,10 @@ namespace autobuild
                 while (true) {
                     var keyInfo = Console.ReadKey(false);
                     if (keyInfo.Key == ConsoleKey.B) {
-                        Run();
+                        Run(true);
                     } else {
                         if (TestCommand != null) {
-                            TestCommand.Run();
+                            TestCommand.Run(true);
                         }
                     }
                 }
@@ -289,16 +289,7 @@ namespace autobuild
                 outputContainsError_ = false;
                 numLinesOutputSinceFirstError_ = 2; // initialize to 2 to leave space for final status output
 
-                // -2 to accomodate both newline and keypress that might have initiated the build
-                Console.ForegroundColor = ConsoleUtil.HeaderColor;
-                Console.WriteLine(new String('-', Console.WindowWidth - 2));
-                if (printTime) {
-                    Console.Write("{0}: ", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                }
-                Console.WriteLine("Initiating a build...");
-                Console.ResetColor();
-
-                var exitCode = base.Run();
+                var exitCode = base.Run(printTime);
                 if (exitCode != 0) {
                     ConsoleUtil.Error("FAIL!");
                 }
@@ -306,7 +297,7 @@ namespace autobuild
                 // Woken up by change to build dependency; start a build.  If
                 // it succeeds, then run the test command.
                 if (exitCode == 0 && TestCommand != null) {
-                    TestCommand.Run();
+                    TestCommand.Run(printTime);
                 }
 
                 return exitCode;
